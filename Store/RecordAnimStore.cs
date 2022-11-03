@@ -36,6 +36,7 @@ public class RecordAnimStore : TimeStore
         animTimer=0;
         animator.StopRecording();
         animator.StartPlayback();
+        //倒播的时间点选择在记录结束的时间
         animator.playbackTime=animator.recorderStopTime;
         
     }

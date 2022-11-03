@@ -4,6 +4,10 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 namespace Kurisu.TimeControl
 {
+    /// <summary>
+    /// 该类演示用，一般情况下调用TimeController进行回溯前会有一部分检测逻辑
+    /// 你可以先将输入逻辑传给Manager，再由Manager调用Controller
+    /// </summary>
 public class TimeManager : MonoBehaviour
 {
     [LabelText("触发按键"),SerializeField]

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Kurisu.TimeControl
 {
 /// <summary>
-/// 控制层
+/// 时间回溯控制器
 /// </summary>
 public class TimeController : MonoBehaviour
 {
@@ -20,14 +20,13 @@ public class TimeController : MonoBehaviour
     private TimeStore playerStore;
     [LabelText("当前状态"),ReadOnly,SerializeField]
     private TimeState state;
-    public bool IsRecalling
-    {
-        get{return state==TimeState.回溯;}
-    }
     public TimeState CurrentState
     {
         get{return state;}
     }
+    /// <summary>
+    /// 为所有回溯器预设容量,你可以测试内存占用后提高上限，因为动态扩容会1.5倍增加容量带来浪费,尽量不要在游戏时扩容
+    /// </summary>
     [SerializeField,LabelText("记录上限"),DisableInPlayMode]
     private int capacity=3000;
     public int Capacity
@@ -36,8 +35,11 @@ public class TimeController : MonoBehaviour
     }
     [SerializeField,LabelText("当前记录数"),ProgressBar(0,"capacity"),ReadOnly]
     private int currentCount;
+    /// <summary>
+    /// 记录步长,因为使用Update记录会有更大误差，建议使用FixedUpdate记录数据，FixedDeltaTime默认为0.02f
+    /// </summary>
     [SerializeField,LabelText("记录步长"),Range(0.01f,0.2f),Tooltip("每多少秒记录一次"),DisableIf("state",TimeState.记录)]
-    private float recordStep=0.1f;
+    private float recordStep=0.02f;
     [SerializeField,LabelText("回溯步长"),Range(0.01f,0.2f),Tooltip("每多少秒回溯一次"),DisableIf("state",TimeState.回溯)]
     private float recallStep=0.02f;
     /// <summary>
@@ -76,7 +78,7 @@ public class TimeController : MonoBehaviour
     public event Action<TimeState>OnStateChangeEvent;
 
     [LabelText("固定更新"),SerializeField]
-    private bool useFixedUpdate;
+    private bool useFixedUpdate=true;
     /// <summary>
     /// 使用物理更新FixedUpdateMode
     /// </summary>

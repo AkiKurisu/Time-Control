@@ -26,6 +26,9 @@ public class TimeSyncModel : MonoBehaviour,ITimeSync
         layers.Add(index,layer);
         layer.OnStepChangeEvent+=delegate(T step,bool playBack){UpdateStep(step,playBack,index);};
     }
+    /// <summary>
+    /// 这里演示的是本地同步，如在网络框架下，需要将T step传输到客户端，在客户端调用该方法。
+    /// </summary>
     void UpdateStep<T>(T step,bool playback,int index) where T:struct,ITimeStep
     {
         var layer=layers[index] as GenericLayer<T>;
